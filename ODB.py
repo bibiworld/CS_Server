@@ -1,5 +1,21 @@
 #!/usr/bin/python
 #coding:utf-8
+'''
+registerAccount():
+	传入两个参数，密码，提示，其中提示默认为“忘记密码”
+	注册成功时返回True，失败为False，出现bug， print "Error:regAcconut"
+
+loginAccount():
+	传入一个参数，密码（字符串）
+	登陆成功是返回“goodjob”， 失败为 "Error:passwd is wrong"
+	
+searchWord():
+	查询单词，传入一个参数，单词拼写
+	成功返回列表信息，失败返回列表 ["Error:no word"]
+	
+文档最后因程序安全加上了close() 函数，
+如将该文件作为模块，务必将文末的cursor.close() bibi.close() 的语句删除
+'''
 
 import MySQLdb
 
