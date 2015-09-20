@@ -81,3 +81,12 @@ class BIBIUserODB:
 
 #cursor.close()
 #bibi.close()
+
+'''如果函数成功调用后，不能再次从数据库中查询信息，说明数据库中并没有真正的
+插入数据，这是用户没有在数据库的操作后加入commit函数所至
+例如，	user.registerAccount()
+		user.loginAccount()
+结果发现每一次的用户登录只能先注册，在登陆，直接登陆会发现出现错误，
+就是用户没有在类的函数调用最后再调用user.commit()导致
+添加	user.commit()即可
+'''
