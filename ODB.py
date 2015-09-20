@@ -13,8 +13,10 @@ searchWord():
 	查询单词，传入一个参数，单词拼写
 	成功返回列表信息，失败返回列表 ["Error:no word"]
 	
+调用该类的函数之后务必调用类的commit函数
+	
 文档最后因程序安全加上了close() 函数，
-如将该文件作为模块，务必将文末的cursor.close() bibi.close() 的语句删除
+如将该文件作为模块，务必将文末的cursor.close() bibi.close() 的语句注释
 '''
 
 import MySQLdb
@@ -34,7 +36,7 @@ class BIBIUserODB:
 		where name = '%s'" % (self.userName)
 		cursor.execute(checkSql)
 		checkIsOk = cursor.fetchone()
-		print checkIsOk
+		#print checkIsOk
 		if (checkIsOk == None):
 			regSql = "insert into bibi_admin (name, pwd, tishi) \
 			values('%s', '%s', '%s')" % (self.userName, passwd, tishi)
@@ -71,10 +73,11 @@ class BIBIUserODB:
 		else:
 			return infoList
 		
+	def commit(self):
+		bibi.commit()#*************
 #user = BIBIUserODB("can")
 #print user.loginAccount("can")
 #print user.registerAccount("can")
 
-bibi.commit()#*************
-cursor.close()
-bibi.close()
+#cursor.close()
+#bibi.close()
