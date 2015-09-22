@@ -2,21 +2,21 @@
 #coding:utf-8
 '''
 registerAccount():
-	´«ÈëÁ½¸ö²ÎÊı£¬ÃÜÂë£¬ÌáÊ¾£¬ÆäÖĞÌáÊ¾Ä¬ÈÏÎª¡°Íü¼ÇÃÜÂë¡±
-	×¢²á³É¹¦Ê±·µ»ØTrue£¬Ê§°ÜÎªFalse£¬³öÏÖbug£¬ print "Error:regAcconut"
+	ä¼ å…¥ä¸¤ä¸ªå‚æ•°ï¼Œå¯†ç ï¼Œæç¤ºï¼Œå…¶ä¸­æç¤ºé»˜è®¤ä¸ºâ€œå¿˜è®°å¯†ç â€
+	æ³¨å†ŒæˆåŠŸæ—¶è¿”å›Trueï¼Œå¤±è´¥ä¸ºFalseï¼Œå‡ºç°bugï¼Œ print "Error:regAcconut"
 
 loginAccount():
-	´«ÈëÒ»¸ö²ÎÊı£¬ÃÜÂë£¨×Ö·û´®£©
-	µÇÂ½³É¹¦ÊÇ·µ»Ø¡°goodjob¡±£¬ Ê§°ÜÎª "Error:passwd is wrong"
+	ä¼ å…¥ä¸€ä¸ªå‚æ•°ï¼Œå¯†ç ï¼ˆå­—ç¬¦ä¸²ï¼‰
+	ç™»é™†æˆåŠŸæ˜¯è¿”å›â€œgoodjobâ€ï¼Œ å¤±è´¥ä¸º "Error:passwd is wrong"
 	
 searchWord():
-	²éÑ¯µ¥´Ê£¬´«ÈëÒ»¸ö²ÎÊı£¬µ¥´ÊÆ´Ğ´
-	³É¹¦·µ»ØÁĞ±íĞÅÏ¢£¬Ê§°Ü·µ»ØÁĞ±í ["Error:no word"]
+	æŸ¥è¯¢å•è¯ï¼Œä¼ å…¥ä¸€ä¸ªå‚æ•°ï¼Œå•è¯æ‹¼å†™
+	æˆåŠŸè¿”å›åˆ—è¡¨ä¿¡æ¯ï¼Œå¤±è´¥è¿”å›åˆ—è¡¨ ["Error:no word"]
 	
-µ÷ÓÃ¸ÃÀàµÄº¯ÊıÖ®ºóÎñ±Øµ÷ÓÃÀàµÄcommitº¯Êı
+è°ƒç”¨è¯¥ç±»çš„å‡½æ•°ä¹‹ååŠ¡å¿…è°ƒç”¨ç±»çš„commitå‡½æ•°
 	
-ÎÄµµ×îºóÒò³ÌĞò°²È«¼ÓÉÏÁËclose() º¯Êı£¬
-Èç½«¸ÃÎÄ¼ş×÷ÎªÄ£¿é£¬Îñ±Ø½«ÎÄÄ©µÄcursor.close() bibi.close() µÄÓï¾ä×¢ÊÍ
+æ–‡æ¡£æœ€åå› ç¨‹åºå®‰å…¨åŠ ä¸Šäº†close() å‡½æ•°ï¼Œ
+å¦‚å°†è¯¥æ–‡ä»¶ä½œä¸ºæ¨¡å—ï¼ŒåŠ¡å¿…å°†æ–‡æœ«çš„cursor.close() bibi.close() çš„è¯­å¥æ³¨é‡Š
 '''
 
 import MySQLdb
@@ -24,14 +24,14 @@ import MySQLdb
 serverIP = "localhost"
 
 
-bibi = MySQLdb.connect(host = serverIP, user = "root", passwd = "unityispower",db = "bibidata");
+bibi = MySQLdb.connect(host = serverIP, user = "root", passwd = "unityispower",db = "bibidata"ï¼Œcharset="utf8");
 cursor = bibi.cursor()
 
 class BIBIUserODB:
 	def __init__(self, username):
 		self.userName = username
 		
-	def registerAccount(self, passwd, tishi = "Íü¼ÇÃÜÂë"):
+	def registerAccount(self, passwd, tishi = "å¿˜è®°å¯†ç "):
 		checkSql = "select * from bibi_admin \
 		where name = '%s'" % (self.userName)
 		cursor.execute(checkSql)
@@ -82,11 +82,11 @@ class BIBIUserODB:
 #cursor.close()
 #bibi.close()
 
-'''Èç¹ûº¯Êı³É¹¦µ÷ÓÃºó£¬²»ÄÜÔÙ´Î´ÓÊı¾İ¿âÖĞ²éÑ¯ĞÅÏ¢£¬ËµÃ÷Êı¾İ¿âÖĞ²¢Ã»ÓĞÕæÕıµÄ
-²åÈëÊı¾İ£¬ÕâÊÇÓÃ»§Ã»ÓĞÔÚÊı¾İ¿âµÄ²Ù×÷ºó¼ÓÈëcommitº¯ÊıËùÖÁ
-ÀıÈç£¬	user.registerAccount()
+'''å¦‚æœå‡½æ•°æˆåŠŸè°ƒç”¨åï¼Œä¸èƒ½å†æ¬¡ä»æ•°æ®åº“ä¸­æŸ¥è¯¢ä¿¡æ¯ï¼Œè¯´æ˜æ•°æ®åº“ä¸­å¹¶æ²¡æœ‰çœŸæ­£çš„
+æ’å…¥æ•°æ®ï¼Œè¿™æ˜¯ç”¨æˆ·æ²¡æœ‰åœ¨æ•°æ®åº“çš„æ“ä½œååŠ å…¥commitå‡½æ•°æ‰€è‡³
+ä¾‹å¦‚ï¼Œ	user.registerAccount()
 		user.loginAccount()
-½á¹û·¢ÏÖÃ¿Ò»´ÎµÄÓÃ»§µÇÂ¼Ö»ÄÜÏÈ×¢²á£¬ÔÚµÇÂ½£¬Ö±½ÓµÇÂ½»á·¢ÏÖ³öÏÖ´íÎó£¬
-¾ÍÊÇÓÃ»§Ã»ÓĞÔÚÀàµÄº¯Êıµ÷ÓÃ×îºóÔÙµ÷ÓÃuser.commit()µ¼ÖÂ
-Ìí¼Ó	user.commit()¼´¿É
+ç»“æœå‘ç°æ¯ä¸€æ¬¡çš„ç”¨æˆ·ç™»å½•åªèƒ½å…ˆæ³¨å†Œï¼Œåœ¨ç™»é™†ï¼Œç›´æ¥ç™»é™†ä¼šå‘ç°å‡ºç°é”™è¯¯ï¼Œ
+å°±æ˜¯ç”¨æˆ·æ²¡æœ‰åœ¨ç±»çš„å‡½æ•°è°ƒç”¨æœ€åå†è°ƒç”¨user.commit()å¯¼è‡´
+æ·»åŠ 	user.commit()å³å¯
 '''

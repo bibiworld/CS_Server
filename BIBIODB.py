@@ -18,14 +18,14 @@ searchWord():
 '''
 import MySQLdb
 
-serverIP = "59.66.131.224"
+serverIP = "localhost"
 
 
 
 class BIBIUserODB:
 	def __init__(self, username):
 		global serverIP
-		self.bibi = MySQLdb.connect(host = serverIP, user = "root", passwd = "unityispower",db = "bibidata");
+		self.bibi = MySQLdb.connect(host = serverIP,user = "root",passwd = "unityispower",db = "bibidata",charset = "utf8");
 		self.cursor= self.bibi.cursor()
 		self.userName = username
 		
