@@ -29,6 +29,6 @@ class BIBIUserCheck(object):
 	'''
 	def isSearch(self, tcpData):
 		if (tcpData.find('search') == self.BIBI_INIT_POS):
-			if (tcpData.count('(') == BIBI_SEARCH_BRACKETS) and (tcpData.count(')') == BIBI_SEARCH_BRACKETS):
+			if (tcpData.count('(') == self.BIBI_SEARCH_BRACKETS) and (tcpData.count(')') == self.BIBI_SEARCH_BRACKETS):
 				return True
 		return False
