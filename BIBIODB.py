@@ -17,6 +17,7 @@ searchWord():
 注意，调用该类的函数后最后必须调用close函数提交数据至数据库	.
 '''
 import MySQLdb
+import re
 
 serverIP = "localhost"
 
@@ -63,13 +64,48 @@ class BIBIUserODB:
 	def searchWord(self, word):
 		searchSql = """select * from bibi_word
 		where spell = '%s'
-		""" % (word)
+		""" % (word)#problem?
 		self.cursor.execute(searchSql)
 		infoList = self.cursor.fetchone()
 		if (infoList == None):
 			return ["Error:no word"]
 		else:
 			return infoList
+			
+	def fuzzyQuery(self, word):
+		maxSize = 0
+		
+		bracket_right = word.find(')')
+		if (bracket_right != -1):
+			#print bracket_right
+			maxSize = word[1:bracket_right]
+			word = word[bracket_right+1:]
+		if (word == ""):
+			print "error1"
+			return ["Error:Please input!"]
+		checkPattern = "[^a-zA-Z*?]"
+		isOK = re.findall(checkPattern, word)
+		#print isOK
+		if (isOK != []):
+			print "error2"
+			return ["Error:Invalid input!"]
+		word = re.sub('\*', '%', word)
+		word = re.sub('\?', '_', word)
+		#是否贪婪或者非贪婪
+		word = MySQLdb.escape_string(word)
+		print word
+		querySql = "select * from bibi_word \
+		where spell like '%s'" % (word)
+		print querySql
+		self.cursor.execute(querySql)
+		wordList = self.cursor.fetchone()
+		if (wordList == []):
+			return ["Error:No word!"]
+		else:
+			print wordList[2].encode("gbk")
+			#for wordGet in wordList:
+			#	print wordGet.encode("gbk")
+		return ["GoodJob"]
 		
 	def close(self):
 		self.bibi.commit()
