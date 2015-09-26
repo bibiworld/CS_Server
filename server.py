@@ -1,4 +1,6 @@
-#encoding=utf-8
+#!/usr/bin/python
+#coding:utf-8
+
 import SocketServer
 import BIBIUserCheck
 import BIBIODB
@@ -71,7 +73,11 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 				for i in range(4):
 					if (len(reinfo[i]) == 0):
 						reinfo[i] = '0'
-				self.request.sendall("BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=reinfo[0], soundmark=reinfo[1], meaning=reinfo[2],examples=reinfo[3]))
+				#print ({meaning})
+				#**BUG**
+				#print reinfo[2].encode("utf-8")
+				#文件为utf8格式，而reinfo为unicode，在文件中不能出现，所以应该先转化为utf8格式
+				self.request.sendall("BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=reinfo[0].encode("utf-8"), soundmark=reinfo[1].encode("utf-8"), meaning=reinfo[2].encode("utf-8"),examples=reinfo[3].encode("utf-8")))
 		return True
 		
 	def handle(self):
@@ -81,7 +87,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 		print "wokao"
 				
 if __name__ == "__main__":
-	HOST, PORT = "59.66.131.132", 1234
+	HOST, PORT = "59.66.131.174", 1234
 	
 	server = SocketServer.TCPServer((HOST, PORT), MyTCPHandler)
 	

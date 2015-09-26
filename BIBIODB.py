@@ -4,7 +4,7 @@
 import MySQLdb
 import re
 
-serverIP = "59.66.131.31"
+serverIP = "localhost"
 
 
 
