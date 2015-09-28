@@ -1,4 +1,6 @@
-#encoding=utf-8
+#!/usr/bin/python
+#coding:utf-8
+
 import SocketServer
 import BIBIUserCheck
 import BIBIODB
@@ -73,6 +75,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 			else:
 				wordInfo = []
 				for i in range(4):
+<<<<<<< HEAD
 					si = reinfo[i]
 					if (si.count('(') > 0):
 						si = si.replace('(', '<*', si.count('('))
@@ -82,6 +85,15 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 						si = '0'
 					wordInfo.append(si)
 				self.request.sendall("BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=wordInfo[0], soundmark=wordInfo[1], meaning=wordInfo[2],examples=wordInfo[3]))
+=======
+					if (len(reinfo[i]) == 0):
+						reinfo[i] = '0'
+				#print ({meaning})
+				#**BUG**
+				#print reinfo[2].encode("utf-8")
+				#文件为utf8格式，而reinfo为unicode，在文件中不能出现，所以应该先转化为utf8格式
+				self.request.sendall("BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=reinfo[0].encode("utf-8"), soundmark=reinfo[1].encode("utf-8"), meaning=reinfo[2].encode("utf-8"),examples=reinfo[3].encode("utf-8")))
+>>>>>>> 78f65e92aed4c01c3659de6b8e25392f840de5ef
 		return True
 		
 	def handle(self):
@@ -92,7 +104,11 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 		print "{} quit".format(self.client_address[0])	
 				
 if __name__ == "__main__":
+<<<<<<< HEAD
 	HOST, PORT = "59.66.131.150", 1234
+=======
+	HOST, PORT = "59.66.131.174", 1234
+>>>>>>> 78f65e92aed4c01c3659de6b8e25392f840de5ef
 	
 	server = SocketServer.TCPServer((HOST, PORT), MyTCPHandler)
 	
