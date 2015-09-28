@@ -3,17 +3,21 @@ import SocketServer
 import BIBIUserCheck
 import BIBIODB
 import re
+import select
 
 mybibi = BIBIUserCheck.BIBIUserCheck()
 curUser = BIBIODB.BIBIUserODB("未登录")
 
 class MyTCPHandler(SocketServer.BaseRequestHandler):
+	'''
+		after handle self.request(socket) will close
+	'''
 	def handle_deal_request(self):
+		ready_to_read, ready_to_write, in_error = select.select([self.request], [self.request,], [])
 		self.data = self.request.recv(1024).strip()
-		print "{} wrote".format(self.client_address[0])
-		print "len: ", len(self.data)
-		if (len(self.data) == 0):
+		if (len(ready_to_read) == 1 and len(self.data) == 0) or (self.data.count('BIBI_quit') > 0):
 			return False
+		
 		print self.data, mybibi.isRigister(self.data), mybibi.isLogin(self.data), mybibi.isSearch(self.data)
 		global curUser
 		'''
@@ -62,26 +66,33 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 			'''
 		elif  (mybibi.isSearch(self.data)):
 			item = re.findall("\([a-zA-Z]+?\)", self.data)
-			print item
 			word = item[0].strip('(').strip(')')
 			reinfo = curUser.searchWord(word)
 			if (len(reinfo) == 1):
 				self.request.sendall("BIBI_search((0)(0)(0)(0))")
 			else:
+				wordInfo = []
 				for i in range(4):
-					if (len(reinfo[i]) == 0):
-						reinfo[i] = '0'
-				self.request.sendall("BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=reinfo[0], soundmark=reinfo[1], meaning=reinfo[2],examples=reinfo[3]))
+					si = reinfo[i]
+					if (si.count('(') > 0):
+						si = si.replace('(', '<*', si.count('('))
+					if (reinfo[i].count(')') > 0):
+						si = si.replace(')', '*>', si.count(')'))
+					if (len(si) == 0):
+						si = '0'
+					wordInfo.append(si)
+				self.request.sendall("BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=wordInfo[0], soundmark=wordInfo[1], meaning=wordInfo[2],examples=wordInfo[3]))
 		return True
 		
 	def handle(self):
+		print "{} wrote".format(self.client_address[0])
 		while (True):
 			if (self.handle_deal_request() == False):
 				break
-		print "wokao"
+		print "{} quit".format(self.client_address[0])	
 				
 if __name__ == "__main__":
-	HOST, PORT = "59.66.131.132", 1234
+	HOST, PORT = "59.66.131.150", 1234
 	
 	server = SocketServer.TCPServer((HOST, PORT), MyTCPHandler)
 	
