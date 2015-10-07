@@ -87,7 +87,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 		print "wokao"
 				
 if __name__ == "__main__":
-	HOST, PORT = "59.66.131.174", 1234
+	HOST, PORT = "59.66.131.117", 1234
 	
 	server = SocketServer.TCPServer((HOST, PORT), MyTCPHandler)
 	

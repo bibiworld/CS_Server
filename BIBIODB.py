@@ -62,11 +62,13 @@ class BIBIUserODB:
 			
 	def fuzzyQuery(self, word):
 		maxSize = 0
+		realList = []
 		
 		bracket_right = word.find(')')
 		if (bracket_right != -1):
 			#print bracket_right
-			maxSize = word[1:bracket_right]
+			maxSize = int(word[1:bracket_right])
+			print maxSize
 			word = word[bracket_right+1:]
 		if (word == ""):
 			print "error1"
@@ -86,14 +88,17 @@ class BIBIUserODB:
 		where spell like '%s'" % (word)
 		print querySql
 		self.cursor.execute(querySql)
-		wordList = self.cursor.fetchone()
+		wordList = self.cursor.fetchall()
 		if (wordList == []):
 			return ["Error:No word!"]
 		else:
-			print wordList[2].encode("gbk")
-			#for wordGet in wordList:
-			#	print wordGet.encode("gbk")
-		return ["GoodJob"]
+			for wordGet in wordList:
+				#print len(wordGet), maxSize
+				if ((maxSize != 0) and (len(wordGet[0]) <= maxSize)):
+					print wordGet#unicode 
+					realList.append(wordGet)
+		return realList
+		#return ["GoodJob"]
 		
 	def commit(self):
 		self.bibi.commit()
