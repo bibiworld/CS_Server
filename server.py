@@ -5,17 +5,21 @@ import SocketServer
 import BIBIUserCheck
 import BIBIODB
 import re
+import select
 
 mybibi = BIBIUserCheck.BIBIUserCheck()
 curUser = BIBIODB.BIBIUserODB("未登录")
 
 class MyTCPHandler(SocketServer.BaseRequestHandler):
+	'''
+		after handle self.request(socket) will close
+	'''
 	def handle_deal_request(self):
+		ready_to_read, ready_to_write, in_error = select.select([self.request], [self.request,], [])
 		self.data = self.request.recv(1024).strip()
-		print "{} wrote".format(self.client_address[0])
-		print "len: ", len(self.data)
-		if (len(self.data) == 0):
+		if (len(ready_to_read) == 1 and len(self.data) == 0) or (self.data.count('BIBI_quit') > 0):
 			return False
+		
 		print self.data, mybibi.isRigister(self.data), mybibi.isLogin(self.data), mybibi.isSearch(self.data)
 		global curUser
 		'''
@@ -64,30 +68,51 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 			'''
 		elif  (mybibi.isSearch(self.data)):
 			item = re.findall("\([a-zA-Z]+?\)", self.data)
-			print item
 			word = item[0].strip('(').strip(')')
 			reinfo = curUser.searchWord(word)
 			if (len(reinfo) == 1):
 				self.request.sendall("BIBI_search((0)(0)(0)(0))")
 			else:
+				wordInfo = []
 				for i in range(4):
-					if (len(reinfo[i]) == 0):
-						reinfo[i] = '0'
+#<<<<<<< HEAD
+					si = reinfo[i]
+					if (si.count('(') > 0):
+						si = si.replace('(', '<*', si.count('('))
+					if (reinfo[i].count(')') > 0):
+						si = si.replace(')', '*>', si.count(')'))
+					if (len(si) == 0):
+						si = '0'
+					wordInfo.append(si)
+				self.request.sendall("BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=wordInfo[0], soundmark=wordInfo[1], meaning=wordInfo[2],examples=wordInfo[3]))
+#=======
+				#	if (len(reinfo[i]) == 0):
+				#		reinfo[i] = '0'
 				#print ({meaning})
 				#**BUG**
 				#print reinfo[2].encode("utf-8")
 				#文件为utf8格式，而reinfo为unicode，在文件中不能出现，所以应该先转化为utf8格式
-				self.request.sendall("BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=reinfo[0].encode("utf-8"), soundmark=reinfo[1].encode("utf-8"), meaning=reinfo[2].encode("utf-8"),examples=reinfo[3].encode("utf-8")))
+				#self.request.sendall("BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=reinfo[0].encode("utf-8"), soundmark=reinfo[1].encode("utf-8"), meaning=reinfo[2].encode("utf-8"),examples=reinfo[3].encode("utf-8")))
+#>>>>>>> 78f65e92aed4c01c3659de6b8e25392f840de5ef
 		return True
 		
 	def handle(self):
+		print "{} wrote".format(self.client_address[0])
 		while (True):
 			if (self.handle_deal_request() == False):
 				break
-		print "wokao"
+		print "{} quit".format(self.client_address[0])	
 				
 if __name__ == "__main__":
+<<<<<<< HEAD
 	HOST, PORT = "59.66.131.117", 1234
+=======
+<<<<<<< HEAD
+	HOST, PORT = "59.66.131.150", 1234
+=======
+	HOST, PORT = "59.66.131.174", 1234
+>>>>>>> 78f65e92aed4c01c3659de6b8e25392f840de5ef
+>>>>>>> bba2340ea1ba1e3343033d6edebdfaffa7d59853
 	
 	server = SocketServer.TCPServer((HOST, PORT), MyTCPHandler)
 	
