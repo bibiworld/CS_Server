@@ -104,16 +104,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 		print "{} quit".format(self.client_address[0])	
 				
 if __name__ == "__main__":
-<<<<<<< HEAD
 	HOST, PORT = "59.66.131.117", 1234
-=======
-<<<<<<< HEAD
-	HOST, PORT = "59.66.131.150", 1234
-=======
-	HOST, PORT = "59.66.131.174", 1234
->>>>>>> 78f65e92aed4c01c3659de6b8e25392f840de5ef
->>>>>>> bba2340ea1ba1e3343033d6edebdfaffa7d59853
-	
 	server = SocketServer.TCPServer((HOST, PORT), MyTCPHandler)
 	
 	server.serve_forever()
