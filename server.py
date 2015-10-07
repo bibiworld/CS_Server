@@ -84,7 +84,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 					if (len(si) == 0):
 						si = '0'
 					wordInfo.append(si)
-				self.request.sendall("BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=wordInfo[0], soundmark=wordInfo[1], meaning=wordInfo[2],examples=wordInfo[3]))
+				self.request.sendall("BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=wordInfo[0].encode("utf-8"), soundmark=wordInfo[1].encode("utf-8"), meaning=wordInfo[2].encode("utf-8"),examples=wordInfo[3].encode("utf-8")))
 #=======
 				#	if (len(reinfo[i]) == 0):
 				#		reinfo[i] = '0'
