@@ -110,7 +110,10 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 				fuzzy
 			'''
 		elif (mybibi.isFuzzy(self.data)):
-			item = re.findall("\([a-zA-Z\(\)\*\?]+?\)", self.data)
+			item = re.findall("\([a-zA-Z\*\?]+?\)", self.data)
+			if (len(item) == 0):
+				item = re.findall("\(\([0-9]+?\)[a-zA-Z\*\?]+?\)", self.data)
+			print item
 			word = item[0].strip('(').strip(')')
 			if (word.count(')') > 0):
 				word = '(' + word
