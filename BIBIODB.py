@@ -4,7 +4,7 @@
 import MySQLdb
 import re
 
-serverIP = "localhost"
+serverIP = "59.66.131.73"
 
 
 
@@ -61,7 +61,7 @@ class BIBIUserODB:
 			return infoList
 			
 	def fuzzyQuery(self, word):
-		maxSize = 0
+		maxSize = 1000
 		realList = []
 		
 		bracket_right = word.find(')')
@@ -94,7 +94,7 @@ class BIBIUserODB:
 		else:
 			for wordGet in wordList:
 				#print len(wordGet), maxSize
-				if ((maxSize != 0) and (len(wordGet[0]) <= maxSize)):
+				if (len(wordGet[0]) <= maxSize):
 					print wordGet#unicode 
 					realList.append(wordGet)
 		return realList

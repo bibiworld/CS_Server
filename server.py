@@ -10,17 +10,39 @@ import select
 mybibi = BIBIUserCheck.BIBIUserCheck()
 curUser = BIBIODB.BIBIUserODB("未登录")
 
+'''
+	replace () with <**>
+'''
+def bracketDeal(si):
+	if (si.count('(') > 0):
+		si = si.replace('(', '<*', si.count('('))
+	if (si.count(')') > 0):
+		si = si.replace(')', '*>', si.count(')'))
+	return si
+	
 class MyTCPHandler(SocketServer.BaseRequestHandler):
 	'''
 		after handle self.request(socket) will close
 	'''
+	#def __init__(self, request = 0, client_address = 0, server = 0):
+	#	print "wocaonima"
+	#	SocketServer.BaseRequestHandler.__init__(self, request, client_address, server)
+	#	self.exceptBug = 0
+				
 	def handle_deal_request(self):
 		ready_to_read, ready_to_write, in_error = select.select([self.request], [self.request,], [])
-		self.data = self.request.recv(1024).strip()
+		try:
+			self.data = self.request.recv(1024).strip()
+		except Exception as msg:
+			print "self.request.recv with bug", msg
+			self.exceptBug += 1
+			if (self.exceptBug > 10):
+				return False
+			return True
+			
 		if (len(ready_to_read) == 1 and len(self.data) == 0) or (self.data.count('BIBI_quit') > 0):
 			return False
 		
-		print self.data, mybibi.isRigister(self.data), mybibi.isLogin(self.data), mybibi.isSearch(self.data)
 		global curUser
 		'''
 			register 
@@ -66,7 +88,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 			'''
 				search
 			'''
-		elif  (mybibi.isSearch(self.data)):
+		elif (mybibi.isSearch(self.data)):
 			item = re.findall("\([a-zA-Z]+?\)", self.data)
 			word = item[0].strip('(').strip(')')
 			reinfo = curUser.searchWord(word)
@@ -91,10 +113,29 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 				#print reinfo[2].encode("utf-8")
 				#文件为utf8格式，而reinfo为unicode，在文件中不能出现，所以应该先转化为utf8格式
 				#self.request.sendall("BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=reinfo[0].encode("utf-8"), soundmark=reinfo[1].encode("utf-8"), meaning=reinfo[2].encode("utf-8"),examples=reinfo[3].encode("utf-8")))
+			'''
+				fuzzy
+			'''
+		elif (mybibi.isFuzzy(self.data)):
+			item = re.findall("\([a-zA-Z\(\)\*\?]+?\)", self.data)
+			word = item[0].strip('(').strip(')')
+			if (word.count(')') > 0):
+				word = '(' + word
+			print "server.py", word, item[0]
+			reinfo = curUser.fuzzyQuery(word)
+			#print reinfo
+			if (len(reinfo) == 0 or isinstance(reinfo[0], str)):
+				self.request.sendall("BIBI_fuzzy(0)")
+			else:
+				wordlist = ""
+				for it in reinfo:
+					wordlist = wordlist + it[0].encode("utf-8") + ',' + bracketDeal(it[2]).encode("utf-8") + ';'
+				self.request.sendall("BIBI_fuzzy({wordlist})".format(wordlist = wordlist))	
 		return True
 		
 	def handle(self):
 		print "{} wrote".format(self.client_address[0])
+		self.exceptBug = 0
 		while (True):
 			if (self.handle_deal_request() == False):
 				break
@@ -102,6 +143,6 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 				
 if __name__ == "__main__":
 	HOST, PORT = "59.66.131.73", 1234
-	server = SocketServer.TCPServer((HOST, PORT), MyTCPHandler)
+	server = SocketServer.ThreadingTCPServer((HOST, PORT), MyTCPHandler)
 	
 	server.serve_forever()
