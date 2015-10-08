@@ -67,7 +67,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 				login
 			'''
 		elif (mybibi.isLogin(self.data)):
-			item = re.findall("\([a-zA-Z]+?\)", self.data)
+			item = re.findall("\([a-zA-Z0-9]+?\)", self.data)
 			print item
 			name = item[0].strip('(').strip(')')
 			password = item[1].strip('(').strip(')')
