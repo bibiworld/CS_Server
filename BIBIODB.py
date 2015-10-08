@@ -4,9 +4,7 @@
 import MySQLdb
 import re
 
-serverIP = "59.66.131.73"
-
-
+serverIP = "localhost"
 
 class BIBIUserODB:
 	def __init__(self, username):
