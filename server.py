@@ -106,13 +106,6 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 						si = '0'
 					wordInfo.append(si)
 				self.request.sendall("BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=wordInfo[0].encode("utf-8"), soundmark=wordInfo[1].encode("utf-8"), meaning=wordInfo[2].encode("utf-8"),examples=wordInfo[3].encode("utf-8")))
-				#	if (len(reinfo[i]) == 0):
-				#		reinfo[i] = '0'
-				#print ({meaning})
-				#**BUG**
-				#print reinfo[2].encode("utf-8")
-				#文件为utf8格式，而reinfo为unicode，在文件中不能出现，所以应该先转化为utf8格式
-				#self.request.sendall("BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=reinfo[0].encode("utf-8"), soundmark=reinfo[1].encode("utf-8"), meaning=reinfo[2].encode("utf-8"),examples=reinfo[3].encode("utf-8")))
 			'''
 				fuzzy
 			'''
