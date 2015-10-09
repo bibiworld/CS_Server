@@ -138,7 +138,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 		print "{} quit".format(self.client_address[0])	
 				
 if __name__ == "__main__":
-	HOST, PORT = "59.66.131.73", 1234
+	HOST, PORT = "101.5.131.59", 1234
 	server = SocketServer.ThreadingTCPServer((HOST, PORT), MyTCPHandler)
 	
 	server.serve_forever()
