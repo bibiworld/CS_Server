@@ -9,7 +9,7 @@ class BIBIUserCheck(object):
 	'''
 		check if it is register request
 	'''
-	def isRigister(self, tcpData):
+	def isRegister(self, tcpData):
 		if (tcpData.find('register') == self.BIBI_INIT_POS):
 			if (tcpData.count('(') == self.BIBI_REGISTER_BRACKETS) and (tcpData.count(')') == self.BIBI_REGISTER_BRACKETS):
 				print tcpData, "Rigister"
