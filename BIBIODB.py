@@ -18,13 +18,13 @@ class BIBIUserODB:
 
 
 
-		def __del__(self):
+	def __del__(self):
 		self.cursor.close()
 		self.bibi.close()
 		
 
 
-		def registerAccount(self, passwd, tishi = "忘记密码"):
+	def registerAccount(self, passwd, tishi = "忘记密码"):
 		checkSql = "select * from bibi_admin \
 		where name = '%s'" % (self.userName)
 		self.cursor.execute(checkSql)
@@ -44,7 +44,7 @@ class BIBIUserODB:
 		
 
 
-		def loginAccount(self, passwd):
+	def loginAccount(self, passwd):
 		loginSql = """select * from bibi_admin
 		where name = '%s'
 		""" % (self.userName)
