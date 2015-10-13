@@ -3,7 +3,7 @@
 
 import MySQLdb
 import re
-import similar.py
+import similar
 
 serverIP = "localhost"
 
@@ -115,18 +115,21 @@ class BIBIUserODB:
 		
 	
 	def similarQuery(self, word):
+		return similarDict[word]
+		'''
 		loseOne = similar.similarDict[word][0]
 		swapAbut = similar.similarDict[word][1]
-		len = word.len()
+		length = len(word)
 		rewords = []
-		for i in range(len):
-			if ((loseOne >> i) & 1) == 1:
-				rewords.append(word[0 : i] + word[i + 1 : len])
-		for i in range(1, len):
-			if ((loseOne >> i) & 1) == 1:
-				rewords.append(word[0 : i - 1] + word[i] + word[i - 1] + word[i + 1 : len])
-		return rewords
 		
+		for i in range(length):
+			if ((loseOne >> i) & 1) == 1:
+				rewords.append(word[0 : i] + word[i + 1 : length])
+		for i in range(1, length):
+			if ((swapAbut >> i) & 1) == 1:
+				rewords.append(word[0 : i - 1] + word[i] + word[i - 1] + word[i + 1 : length])
+		return rewords
+		'''
 	
 	
 	def commit(self):
