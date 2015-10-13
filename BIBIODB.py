@@ -3,8 +3,11 @@
 
 import MySQLdb
 import re
+import similar
 
 serverIP = "localhost"
+
+
 
 class BIBIUserODB:
 	def __init__(self, username):
@@ -12,10 +15,15 @@ class BIBIUserODB:
 		self.bibi = MySQLdb.connect(host = serverIP, user = "root", passwd = "unityispower",db = "bibidata", charset = "utf8");
 		self.cursor= self.bibi.cursor()
 		self.userName = username
+
+
+
 	def __del__(self):
 		self.cursor.close()
 		self.bibi.close()
 		
+
+
 	def registerAccount(self, passwd, tishi = "忘记密码"):
 		checkSql = "select * from bibi_admin \
 		where name = '%s'" % (self.userName)
@@ -34,6 +42,8 @@ class BIBIUserODB:
 		else:
 			return False
 		
+
+
 	def loginAccount(self, passwd):
 		loginSql = """select * from bibi_admin
 		where name = '%s'
@@ -47,6 +57,8 @@ class BIBIUserODB:
 		else:
 			return "Error:passwd is wrong"
 			
+
+		
 	def searchWord(self, word):
 		searchSql = """select * from bibi_word
 		where spell = '%s'
@@ -58,6 +70,8 @@ class BIBIUserODB:
 		else:
 			return infoList
 			
+	
+	
 	def fuzzyQuery(self, word):
 		maxSize = 1000
 		realList = []
@@ -98,6 +112,26 @@ class BIBIUserODB:
 		return realList
 		#return ["GoodJob"]
 		
+		
+	
+	def similarQuery(self, word):
+		return similarDict[word]
+		'''
+		loseOne = similar.similarDict[word][0]
+		swapAbut = similar.similarDict[word][1]
+		length = len(word)
+		rewords = []
+		
+		for i in range(length):
+			if ((loseOne >> i) & 1) == 1:
+				rewords.append(word[0 : i] + word[i + 1 : length])
+		for i in range(1, length):
+			if ((swapAbut >> i) & 1) == 1:
+				rewords.append(word[0 : i - 1] + word[i] + word[i - 1] + word[i + 1 : length])
+		return rewords
+		'''
+	
+	
 	def commit(self):
 		self.bibi.commit()
 		
