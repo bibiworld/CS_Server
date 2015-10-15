@@ -1,0 +1,4 @@
+windows下注意事项
+1、运行 ssh-keygen -C "email" -f "name" 请用 git shell 
+(git shell 和 cmd 中的默认路径不一样)
+2、ssh_config 所在的.ssh和公匙私匙所在的.ssh不在同一个目录，ssh_config在 appdata/local/github/portablegit/etc/ssh下，公匙私匙所在的.ssh和appdata同一目录
