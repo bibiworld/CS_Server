@@ -1,0 +1,4 @@
+#ignore the pyc file
+*.pyc
+1.py
+baibaibai/*
