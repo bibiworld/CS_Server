@@ -1,60 +1,55 @@
 #!/usr/bin/python
 #coding:utf-8
-'''
-registerAccount():
-	传入两个参数，密码，提示，其中提示默认为“忘记密码”
-	注册成功时返回True，失败为False，出现bug， print "Error:regAcconut"
-
-loginAccount():
-	传入一个参数，密码（字符串）
-	登陆成功是返回“goodjob”， 失败为 "Error:passwd is wrong"
-	
-searchWord():
-	查询单词，传入一个参数，单词拼写
-	成功返回列表信息，失败返回列表 ["Error:no word"]
-	
-调用该类的函数之后务必调用类的commit函数
-	
-文档最后因程序安全加上了close() 函数，
-如将该文件作为模块，务必将文末的cursor.close() bibi.close() 的语句注释
-'''
 
 import MySQLdb
+import re
+import similar
 
 serverIP = "localhost"
 
 
-bibi = MySQLdb.connect(host = serverIP, user = "root", passwd = "unityispower",db = "bibidata"，charset="utf8");
-cursor = bibi.cursor()
 
 class BIBIUserODB:
 	def __init__(self, username):
+		global serverIP
+		self.bibi = MySQLdb.connect(host = serverIP, user = "root", passwd = "unityispower",db = "bibidata", charset = "utf8");
+		self.cursor= self.bibi.cursor()
 		self.userName = username
+
+
+
+	def __del__(self):
+		self.cursor.close()
+		self.bibi.close()
 		
+
+
 	def registerAccount(self, passwd, tishi = "忘记密码"):
 		checkSql = "select * from bibi_admin \
 		where name = '%s'" % (self.userName)
-		cursor.execute(checkSql)
-		checkIsOk = cursor.fetchone()
-		#print checkIsOk
+		self.cursor.execute(checkSql)
+		checkIsOk = self.cursor.fetchone()
+		print checkIsOk
 		if (checkIsOk == None):
 			regSql = "insert into bibi_admin (name, pwd, tishi) \
 			values('%s', '%s', '%s')" % (self.userName, passwd, tishi)
 			#print regSql
 			try:
-				cursor.execute(regSql)
+				self.cursor.execute(regSql)
 			except:
 				print "Error:regAcconut"
 			return True
 		else:
 			return False
 		
+
+
 	def loginAccount(self, passwd):
 		loginSql = """select * from bibi_admin
 		where name = '%s'
 		""" % (self.userName)
-		cursor.execute(loginSql)
-		infoList = cursor.fetchone()
+		self.cursor.execute(loginSql)
+		infoList = self.cursor.fetchone()
 		if (infoList == None):
 			return "Error:Name is wrong"
 		elif(infoList[2] == passwd):
@@ -62,31 +57,95 @@ class BIBIUserODB:
 		else:
 			return "Error:passwd is wrong"
 			
+
+		
 	def searchWord(self, word):
 		searchSql = """select * from bibi_word
 		where spell = '%s'
-		""" % (word)
-		cursor.execute(searchSql)
-		infoList = cursor.fetchone()
+		""" % (word)#problem?
+		self.cursor.execute(searchSql)
+		infoList = self.cursor.fetchone()
 		if (infoList == None):
 			return ["Error:no word"]
 		else:
 			return infoList
+			
+	
+	
+	def fuzzyQuery(self, word ):
+		'''
+		“.”：匹配任意单个字符
+		“?”：匹配前面的子表达式0次或1次。
+		“+”：匹配前面的子表达式1次或多次。
+		“*”：匹配前面的子表达式0次或多次。x*，表示0个或多个x字符；[0-9]*，匹配任何数量的数字。
+		“^”：表示匹配开始位置。
+		“$”：表示匹配结束位置。
+		“[]”：表示一个集合。[hi]，表示匹配h或i；[a-d]，表示匹配a、b、c、d中任一个。
+		“{}”：表示重复的次数。8{5}，表示匹配5个8，即88888；[0-9]{5,11}，表示匹配5到11个数字。
+		'''
+		maxSize = 1000
+		realList = []
 		
+		bracket_right = word.find(')')
+		if (bracket_right != -1):
+			#print bracket_right
+			maxSize = int(word[1:bracket_right])
+			print maxSize
+			word = word[bracket_right+1:]
+		if (word == ""):
+			print "error1"
+			return ["Error:Please input!"]
+		checkPattern = "[^a-zA-Z.*?+^$\[\]{}]"
+		isOK = re.findall(checkPattern, word)
+		#print isOK
+		if (isOK != []):
+			print "error2"
+			return ["Error:Invalid input!"]
+		#word = re.sub('\*', '%', word)
+		#word = re.sub('\?', '_', word)
+		word = '^' + word + '$';
+		#是否贪婪或者非贪婪
+		word = MySQLdb.escape_string(word)
+		print word
+		querySql = "select * from bibi_word \
+		where spell regexp '%s'" % (word)
+		print querySql
+		self.cursor.execute(querySql)
+		wordList = self.cursor.fetchall()
+		if (wordList == []):
+			return ["Error:No word!"]
+		else:
+			for wordGet in wordList:
+				#print len(wordGet), maxSize
+				if (len(wordGet[0]) <= maxSize):
+					print wordGet#unicode 
+					realList.append(wordGet)
+		return realList
+		#return ["GoodJob"]
+		
+		
+	
+	def similarQuery(self, word):
+		return similarDict[word]
+		'''
+		loseOne = similar.similarDict[word][0]
+		swapAbut = similar.similarDict[word][1]
+		length = len(word)
+		rewords = []
+		
+		for i in range(length):
+			if ((loseOne >> i) & 1) == 1:
+				rewords.append(word[0 : i] + word[i + 1 : length])
+		for i in range(1, length):
+			if ((swapAbut >> i) & 1) == 1:
+				rewords.append(word[0 : i - 1] + word[i] + word[i - 1] + word[i + 1 : length])
+		return rewords
+		'''
+	
+	
 	def commit(self):
-		bibi.commit()#*************
-#user = BIBIUserODB("can")
-#print user.loginAccount("can")
-#print user.registerAccount("can")
-
-#cursor.close()
-#bibi.close()
-
-'''如果函数成功调用后，不能再次从数据库中查询信息，说明数据库中并没有真正的
-插入数据，这是用户没有在数据库的操作后加入commit函数所至
-例如，	user.registerAccount()
-		user.loginAccount()
-结果发现每一次的用户登录只能先注册，在登陆，直接登陆会发现出现错误，
-就是用户没有在类的函数调用最后再调用user.commit()导致
-添加	user.commit()即可
-'''
+		self.bibi.commit()
+		
+	
+	
+	

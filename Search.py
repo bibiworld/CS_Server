@@ -28,16 +28,6 @@ def searchWord(word, user = None):#user is the accout of searchWord
 
 
 def fuzzyQuery(word, user = None):
-	'''
-	“.”：匹配任意单个字符
-	“?”：匹配前面的子表达式0次或1次。
-	“+”：匹配前面的子表达式1次或多次。
-	“*”：匹配前面的子表达式0次或多次。x*，表示0个或多个x字符；[0-9]*，匹配任何数量的数字。
-	“^”：表示匹配开始位置。
-	“$”：表示匹配结束位置。
-	“[]”：表示一个集合。[hi]，表示匹配h或i；[a-d]，表示匹配a、b、c、d中任一个。
-	“{}”：表示重复的次数。8{5}，表示匹配5个8，即88888；[0-9]{5,11}，表示匹配5到11个数字。
-	'''
 	global userName
 	userName = ""
 	if (user != None):

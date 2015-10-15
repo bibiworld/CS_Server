@@ -1,0 +1,44 @@
+conn.py
+	你并不需要去调用或者了解该文件
+
+BIBIUserODB.py
+	该文件包含一个类，BIBIUserODB，该类为用户相关的操作
+	初始化需要传入一个用户名：username
+	类函数
+	1）registerAccount(self, passwd, tishi = "忘记密码")
+		实现用户的注册功能。
+		注册出现问题，返回 "Error:regAcconut"
+		注册成功，返回 True
+		注册名已被使用，返回 False
+		
+	2）loginAccount(self, passwd)
+		实现用户的登陆功能。
+		用户名不存在，返回 "Error:Name is wrong"
+		密码出现错误，返回 "Error:passwd is wrong"
+		登陆成功，返回 "GoodJob"
+
+Search.py
+	该文件包含用户查询相关操作。
+	文件含有两个函数，查询和模糊查询
+	函数1）searchWord(word, user = None)
+		该函数传入单词拼写，和类BIBIUserODB（可选，默认为None）。
+		查询结果不存在，返回 ["Error:no word"]
+		查询结果存在，返回列表信息，依次为，拼写，音标，意思，例句。-----------*
+			["set", "set; s?t", "n.组合,集合,设定", "[I|can't|stop|yre|sgoing.][如果我住你。]"]
+			
+	函数2）fuzzyQuery(word, user = None)
+		该函数传入单词拼写，和类BIBIUserODB（可选，默认为None）。
+		查询结果不存在，返回 ["Error:No word!"]
+		查询结果存在，返回 列表信息，列表中包含元组，元组为*式格式的列表。
+			[("word",......),("set",...),("god",...)]
+			
+		模糊查询的规则：
+			“.”：匹配任意单个字符
+			“?”：匹配前面的子表达式0次或1次。
+			“+”：匹配前面的子表达式1次或多次。
+			“*”：匹配前面的子表达式0次或多次。x*，表示0个或多个x字符；[0-9]*，匹配任何数量的数字。
+			“^”：表示匹配开始位置。
+			“$”：表示匹配结束位置。
+			“[]”：表示一个集合。[hi]，表示匹配h或i；[a-d]，表示匹配a、b、c、d中任一个。
+			“{}”：表示重复的次数。8{5}，表示匹配5个8，即88888；[0-9]{5,11}，表示匹配5到11个数字。
+	
