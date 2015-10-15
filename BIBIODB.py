@@ -72,7 +72,7 @@ class BIBIUserODB:
 			
 	
 	
-	def fuzzyQuery(self, word, ):
+	def fuzzyQuery(self, word ):
 		'''
 		“.”：匹配任意单个字符
 		“?”：匹配前面的子表达式0次或1次。
