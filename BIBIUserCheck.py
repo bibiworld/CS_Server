@@ -6,6 +6,7 @@ class BIBIUserCheck(object):
 	BIBI_LOGIN_BRACKETS = 3
 	BIBI_SEARCH_BRACKETS = 1
 	BIBI_FUZZY_BRACKETS = 2
+	BIBI_SIMILAR_BRACKETS = 1
 	'''
 		check if it is register request
 	'''
@@ -44,6 +45,13 @@ class BIBIUserCheck(object):
 			if ((tcpData.count('(') == self.BIBI_SEARCH_BRACKETS) and (tcpData.count(')') == self.BIBI_SEARCH_BRACKETS))\
 			or ((tcpData.count('(') == self.BIBI_FUZZY_BRACKETS) and (tcpData.count(')') == self.BIBI_FUZZY_BRACKETS)):
 				print tcpData, "Fuzzy"
+				return True
+		return False
+	
+	def isSimilar(self, tcpData):
+		if (tcpData.find('similar') == self.BIBI_INIT_POS):
+			if (tcpData.count('(') == self.BIBI_SIMILAR_BRACKETS) and (tcpData.count(')') == self.BIBI_SIMILAR_BRACKETS):
+				print tcpData, "Similar"
 				return True
 		return False
 	

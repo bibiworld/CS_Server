@@ -4,7 +4,7 @@ import MySQLdb
 
 serverIP = "localhost"
 
-bibi = MySQLdb.connect(host = serverIP, user = "root", passwd = "unityispower",db = "bibidata", charset = "utf8");
+bibi = MySQLdb.connect(host = serverIP, user = "root", passwd = "bibiworld",db = "bibidata", charset = "utf8");
 cursor= bibi.cursor()
 
 def commit():

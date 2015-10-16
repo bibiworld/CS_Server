@@ -178,19 +178,19 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 		global curUser
 	
 		if (mybibi.isRegister(self.data)):
-			doRegister(self, curUser)
+			self.doRegister(curUser)
 			
 		elif (mybibi.isLogin(self.data)):
-			doLogin(self, curUser)
+			self.doLogin(curUser)
 			
 		elif (mybibi.isSearch(self.data)):
-			doSearch(self, curUser)
+			self.doSearch(curUser)
 			
 		elif (mybibi.isFuzzy(self.data)):
-			doFuzzy(self, curUser)
+			self.doFuzzy(curUser)
 			
 		elif (mybibi.isSimilar(self.data)):
-			doSimilar(self, curUser)
+			self.doSimilar(curUser)
 			
 		return True
 		
@@ -210,7 +210,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 				
 				
 if __name__ == "__main__":
-	HOST, PORT = "59.66.131.178", 1234
+	HOST, PORT = "10.1.2.62", 1234
 	server = SocketServer.ThreadingTCPServer((HOST, PORT), MyTCPHandler)
 	
 	server.serve_forever()

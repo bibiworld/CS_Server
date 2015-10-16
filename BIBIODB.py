@@ -5,26 +5,26 @@ import Search
 
 class BIBIODB:
 	def __init__(self, username):
-		UserClass = BIBIUserODB.BIBIUserODB(username)
+		self.UserClass = BIBIUserODB.BIBIUserODB(username)
 		
 	def __del__(self):
 		UserClass.__del__()
 		
 	def registerAccount(self, passwd, tishi = "Íü¼ÇÃÜÂë"):
-		UserClass.registerAccount(passwd, tishi)
+		return UserClass.registerAccount(passwd, tishi)
 	
 	def loginAccount(self, passwd):
-		UserClass.loginAccount(passwd)
+		return UserClass.loginAccount(passwd)
 		
 	def commit(self):
-		UserClass.commit()
+		return UserClass.commit()
 		
-	def searchWord(word):
-		Search.searchWord(word, UserClass)
+	def searchWord(self, word):
+		return Search.searchWord(word, self.UserClass)
 		
-	def fuzzyQuery(word):
-		Search.fuzzyQuery(word, UserClass)
+	def fuzzyQuery(self, word):
+		return Search.fuzzyQuery(word, self.UserClass)
 		
-	def similarQuery(word):
-		Search.similarQuery(word, UserClass)
+	def similarQuery(self, word):
+		return Search.similarQuery(word, self.UserClass)
 		
