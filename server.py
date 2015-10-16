@@ -10,7 +10,7 @@ import select
 
 
 mybibi = BIBIUserCheck.BIBIUserCheck()
-curUser = BIBIODB.BIBIUserODB("未登录")
+curUser = BIBIODB.BIBIODB("未登录")
 
 
 
@@ -46,7 +46,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 		name = item[0].strip('(').strip(')')
 		password = item[1].strip('(').strip(')')
 		print "server.py", name, password
-		ok = BIBIODB.BIBIUserODB(name)
+		ok = BIBIODB.BIBIODB(name)
 		reinfo =  ok.registerAccount(password)
 		ok.commit()
 		if (reinfo == True):
@@ -69,7 +69,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 		name = item[0].strip('(').strip(')')
 		password = item[1].strip('(').strip(')')
 		print "server.py", name, password
-		ok = BIBIODB.BIBIUserODB(name)
+		ok = BIBIODB.BIBIODB(name)
 		reinfo =  ok.loginAccount(password)	
 		ok.commit()
 		if (reinfo.count("Error:Name is wrong") == 1):
