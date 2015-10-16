@@ -2,6 +2,7 @@
 #coding:utf-8
 
 import BIBIUserODB
+import similar
 import conn
 
 userName = ""
@@ -74,3 +75,20 @@ def fuzzyQuery(word, user = None):
 				realList.append(wordGet)
 	return realList
 	#return ["GoodJob"]
+	
+def similarQuery(word, user=None):
+	return similarDict[word]
+		'''
+		loseOne = similar.similarDict[word][0]
+		swapAbut = similar.similarDict[word][1]
+		length = len(word)
+		rewords = []
+		
+		for i in range(length):
+			if ((loseOne >> i) & 1) == 1:
+				rewords.append(word[0 : i] + word[i + 1 : length])
+		for i in range(1, length):
+			if ((swapAbut >> i) & 1) == 1:
+				rewords.append(word[0 : i - 1] + word[i] + word[i - 1] + word[i + 1 : length])
+		return rewords
+		'''
