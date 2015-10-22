@@ -2,6 +2,7 @@
 #coding:utf-8
 import BIBIUserODB
 import Search
+import goodSentence
 
 class BIBIODB:
 	def __init__(self, username):
@@ -27,4 +28,6 @@ class BIBIODB:
 		
 	def similarQuery(self, word):
 		return Search.similarQuery(word, self.UserClass)
-		
+	
+	def sentenceQuery(self):
+		return goodSentence.sentenceQuery(self.UserClass)
