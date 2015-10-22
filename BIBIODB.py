@@ -9,16 +9,16 @@ class BIBIODB:
 		self.UserClass = BIBIUserODB.BIBIUserODB(username)
 		
 	def __del__(self):
-		UserClass.__del__()
+		self.UserClass.__del__()
 		
-	def registerAccount(self, passwd, tishi = "Íü¼ÇÃÜÂë"):
-		return UserClass.registerAccount(passwd, tishi)
+	def registerAccount(self, passwd, tishi = "å¯†ç "):
+		return self.UserClass.registerAccount(passwd, tishi)
 	
 	def loginAccount(self, passwd):
-		return UserClass.loginAccount(passwd)
+		return self.UserClass.loginAccount(passwd)
 		
 	def commit(self):
-		return UserClass.commit()
+		return self.UserClass.commit()
 		
 	def searchWord(self, word):
 		return Search.searchWord(word, self.UserClass)

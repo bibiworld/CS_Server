@@ -6,12 +6,7 @@ import re
 
 class BIBIUserODB:
 	def __init__(self, username):
-		self.userName = username
-
-	def __del__(self):
-		conn.close()
-		
-
+		self.userName = username	
 
 	def registerAccount(self, passwd, tishi = "忘记密码"):
 		checkSql = "select * from bibi_admin \
