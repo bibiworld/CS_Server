@@ -160,12 +160,12 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 	'''
 		sentence
 	'''
-	def doSentence(self, curUser):
+	'''def doSentence(self, curUser):
 		english, chinese =  curUser.sentenceQuery()
 		english = bracketDeal(english)
 		chinese = bracketDeal(chinese)
 		self.request.sendall("BIBI_sentence(({english})({chinese}))".format(english = english, chinese = chinese.encode("utf-8")))
-		
+		'''
 	'''
 		deal every handle request
 	'''
@@ -200,8 +200,8 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 		elif (mybibi.isSimilar(self.data)):
 			self.doSimilar(curUser)
 			
-		elif (mybibi.isSentence(self.data)):	
-			self.doSentence(curUser)
+		'''elif (mybibi.isSentence(self.data)):	
+			self.doSentence(curUser)'''
 			
 		return True
 		
@@ -221,7 +221,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 				
 				
 if __name__ == "__main__":
-	HOST, PORT = "10.1.2.62", 1234
+	HOST, PORT = "0.0.0.0", 1234
 	server = SocketServer.ThreadingTCPServer((HOST, PORT), MyTCPHandler)
 	
 	server.serve_forever()

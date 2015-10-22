@@ -8,9 +8,6 @@ class BIBIODB:
 	def __init__(self, username):
 		self.UserClass = BIBIUserODB.BIBIUserODB(username)
 		
-	def __del__(self):
-		self.UserClass.__del__()
-		
 	def registerAccount(self, passwd, tishi = "密码"):
 		return self.UserClass.registerAccount(passwd, tishi)
 	
