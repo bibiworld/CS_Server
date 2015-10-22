@@ -6,7 +6,7 @@ import BIBIUserCheck
 import BIBIODB
 import re
 import select
-
+import time
 
 
 mybibi = BIBIUserCheck.BIBIUserCheck()
@@ -173,6 +173,11 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 		ready_to_read, ready_to_write, in_error = select.select([self.request], [self.request,], [])
 		try:
 			self.data = self.request.recv(1024).strip()
+			if (self.data.count(self.lastCMD) > 0):
+				time.sleep(1)
+			else:
+				self.lastCMD = self.data
+			print "data read", len(self.data), self.data
 		except Exception as msg:
 			print "self.request.recv with bug", msg
 			self.exceptBug += 1
@@ -212,6 +217,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 	def handle(self):
 		print "{} wrote".format(self.client_address[0])
 		self.exceptBug = 0
+		self.lastCMD = ""
 		while (True):
 			if (self.handle_deal_request() == False):
 				break

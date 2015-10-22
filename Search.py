@@ -4,6 +4,8 @@
 import BIBIUserODB
 import similar
 import conn
+import re
+import MySQLdb
 
 userName = ""
 	
