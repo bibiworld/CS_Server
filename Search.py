@@ -2,6 +2,7 @@
 #coding:utf-8
 
 import BIBIUserODB
+import BIBIPicture
 import similar
 import conn
 import re
@@ -26,6 +27,8 @@ def searchWord(word, user = None):#user is the accout of searchWord
 	if (infoList == None):
 		return ["Error:no word"]
 	else:
+		infoList =  list(infoList)
+		infoList.append(BIBIPicture.BIBIPicture(word))
 		return infoList
 		
 

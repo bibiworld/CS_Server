@@ -35,7 +35,15 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 	#	print "wocaonima"
 	#	SocketServer.BaseRequestHandler.__init__(self, request, client_address, server)
 	#	self.exceptBug = 0
-				
+		
+	'''
+	send message
+	'''
+	def sendMessage(self, curUser, message):
+		self.request.sendall(message)
+		
+		
+		
 	'''
 		register 
 	'''
@@ -171,19 +179,22 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 	'''
 	def handle_deal_request(self):
 		ready_to_read, ready_to_write, in_error = select.select([self.request], [self.request,], [])
-		try:
-			self.data = self.request.recv(1024).strip()
-			if (self.data.count(self.lastCMD) > 0):
-				time.sleep(1)
-			else:
-				self.lastCMD = self.data
-			print "data read", len(self.data), self.data
-		except Exception as msg:
-			print "self.request.recv with bug", msg
-			self.exceptBug += 1
-			if (self.exceptBug > 10):
+		self.data = ""
+		if len(ready_to_read) > 0:
+			try:
+				self.data = self.request.recv(1024).strip()
+				'''if (self.data.count(self.lastCMD) > 0):
+					time.sleep(1)
+				else:
+					self.lastCMD = self.data'''
+				print "data read", len(self.data), self.data
+			except Exception as msg:
+				print "self.request.recv with bug", msg
+				'''self.exceptBug += 1
+				if (self.exceptBug > 10):
+					return False
+				return True'''
 				return False
-			return True
 			
 		if (len(ready_to_read) == 1 and len(self.data) == 0) or (self.data.count('BIBI_quit') > 0):
 			return False
@@ -221,6 +232,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 		while (True):
 			if (self.handle_deal_request() == False):
 				break
+			time.sleep(1)
 		print "{} quit".format(self.client_address[0])	
 				
 				
