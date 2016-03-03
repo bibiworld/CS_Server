@@ -63,7 +63,7 @@ class BIBIUserCheck(object):
 	'''
 	def isFuzzy(self, tcpData):
 		if (tcpData.count('(') < self.BIBI_FUZZY_BRACKETS):
-			return
+			return False
 		#remain the first request
 		while (tcpData.count('(') > self.BIBI_FUZZY_BRACKETS):
 			tcpData = tcpData[:-1]
@@ -80,7 +80,7 @@ class BIBIUserCheck(object):
 	'''
 	def isSimilar(self, tcpData):
 		if (tcpData.count('(') < self.BIBI_SIMILAR_BRACKETS):
-			return
+			return False
 		#remain the first request
 		while (tcpData.count('(') > self.BIBI_SIMILAR_BRACKETS):
 			tcpData = tcpData[:-1]
@@ -96,7 +96,7 @@ class BIBIUserCheck(object):
 	'''
 	def isSentence(self, tcpData):
 		if (tcpData.count('(') < self.BIBI_SENTENCE_BRACKETS):
-			return
+			return False
 		#remain the first request
 		while (tcpData.count('(') > self.BIBI_SENTENCE_BRACKETS):
 			tcpData = tcpData[:-1]
