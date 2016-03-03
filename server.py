@@ -97,6 +97,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 		search
 	'''	
 	def doSearch(self, curUser):
+		print self.data, " keng"
 		item = re.findall("\([a-zA-Z]+?\)", self.data)
 		if (len(item) != 1):
 			return
@@ -106,8 +107,10 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 			self.request.sendall("BIBI_search((0)(0)(0)(0))")
 		else:
 			wordInfo = []
+			print "enter"
 			for i in range(4):
 				si = reinfo[i]
+				print "sea "
 				if (si.count('(') > 0):
 					si = si.replace('(', '<*', si.count('('))
 				if (reinfo[i].count(')') > 0):
@@ -115,7 +118,11 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 				if (len(si) == 0):
 					si = '0'
 				wordInfo.append(si)
-			self.request.sendall("BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=wordInfo[0].encode("utf-8"), soundmark=wordInfo[1].encode("utf-8"), meaning=wordInfo[2].encode("utf-8"),examples=wordInfo[3].encode("utf-8")))
+			tiaoshi = "BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=wordInfo[0].encode("utf-8"), soundmark=wordInfo[1].encode("utf-8"), meaning=wordInfo[2].encode("utf-8"),examples=wordInfo[3].encode("utf-8"))
+			
+			self.request.sendall(tiaoshi)
+			print "search debug: ", tiaoshi
+			#self.request.sendall("BIBI_search(({words})({soundmark})({meaning})({examples}))".format(words=wordInfo[0].encode("utf-8"), soundmark=wordInfo[1].encode("utf-8"), meaning=wordInfo[2].encode("utf-8"),examples=wordInfo[3].encode("utf-8")))
 			
 			
 			
@@ -204,25 +211,54 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 			return False
 		
 		global curUser
-	
-		if (mybibi.isRegister(self.data)):
-			self.doRegister(curUser)
-			
-		elif (mybibi.isLogin(self.data)):
-			self.doLogin(curUser)
-			
-		elif (mybibi.isSearch(self.data)):
-			self.doSearch(curUser)
-			
-		elif (mybibi.isFuzzy(self.data)):
-			self.doFuzzy(curUser)
-			
-		elif (mybibi.isSimilar(self.data)):
-			self.doSimilar(curUser)
-			
-		elif (mybibi.isSentence(self.data)):	
-			self.doSentence(curUser)
-			
+		
+		askTime = 0
+		totTime = 6
+		redata = False
+		while (askTime < totTime):
+			if (askTime == 0):
+				redata = mybibi.isRegister(self.data)
+				if (redata != False):
+					self.data = redata[:]
+					self.doRegister(curUser)
+					break;
+					
+			if (askTime == 1):
+				redata = mybibi.isLogin(self.data)
+				if (redata != False):
+					self.data = redata[:]
+					self.doLogin(curUser)
+					break;
+					
+			if (askTime == 2):
+				redata = mybibi.isSearch(self.data)
+				if (redata != False):
+					self.data = redata[:]
+					self.doSearch(curUser)
+					break;
+					
+			if (askTime == 3):
+				redata = mybibi.isFuzzy(self.data)
+				if (redata != False):
+					self.data = redata[:]
+					self.doFuzzy(curUser)
+					break;
+					
+			if (askTime == 4):
+				redata = mybibi.isSimilar(self.data)
+				if (redata != False):
+					self.data = redata[:]
+					self.doSimilar(curUser)
+					break;
+					
+			if (askTime == 5):
+				redata = mybibi.isSentence(self.data)
+				if (redata != False):
+					self.data = redata[:]
+					self.doSentence(curUser)
+					break;
+					
+			askTime = askTime + 1;
 		return True
 		
 		
