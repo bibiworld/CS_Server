@@ -172,7 +172,11 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 		english, chinese =  curUser.sentenceQuery()
 		english = bracketDeal(english)
 		chinese = bracketDeal(chinese)
-		self.request.sendall("BIBI_sentence(({english})({chinese}))".format(english = english, chinese = chinese.encode("utf-8")))
+		
+		diaoshi = "BIBI_sentence(({english})({chinese}))".format(english = english, chinese = chinese.encode("utf-8"))
+		print "sentence::: " + diaoshi
+		self.request.sendall(diaoshi)
+		#self.request.sendall("BIBI_sentence(({english})({chinese}))".format(english = english, chinese = chinese.encode("utf-8")))
 		
 	'''
 		deal every handle request
